@@ -4,7 +4,7 @@ const celebritiesSchema = new Schema(
   {
     name: String,
     occupation: String,
-    catchPhrase: String,
+    catchphrase: String,
   },
   {
     timestamps: true,
