@@ -2,7 +2,10 @@ const { Schema, model } = require('mongoose');
 
 const celebritiesSchema = new Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      require: true,
+    },
     occupation: String,
     catchphrase: String,
   },

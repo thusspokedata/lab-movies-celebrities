@@ -1,19 +1,31 @@
-const Celebrities = require('../models/Celebrity.model');
+const Celebrity = require('../models/Celebrity.model');
 const router = require('express').Router();
 
-router.get('/celebrities/create', (req, res) => {
+router.get('/create', (req, res) => {
   res.render('celebrities/new-celebrity');
 });
 
-router.post('/celebrities/create', (req, res, next) => {
+router.post('/create', (req, res, next) => {
   const { name, occupation, catchphrase } = req.body;
-  Celebrities.create({
+  Celebrity.create({
     name,
     occupation,
     catchphrase,
   })
-    .then((celebrity) => {
+    .then((celebrities) => {
       res.redirect('/celebrities');
+    })
+    .catch((err) => {
+      next(err);
+      res.render('celebrities/new-celebrity');
+    });
+});
+
+router.get('/', (req, res, next) => {
+  Celebrity.find()
+    .then((celebrities) => {
+      console.log(celebrities);
+      res.render('celebrities/celebrities', celebrities);
     })
     .catch((err) => {
       console.log(err);
