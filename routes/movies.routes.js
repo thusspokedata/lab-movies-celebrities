@@ -70,4 +70,29 @@ router.get('/:id', (req, res, next) => {
 //   }
 // });
 
+router.post('/:id/delete', async (req, res) => {
+  const movieId = req.params.id;
+  try {
+    await Movie.findByIdAndRemove(movieId);
+    console.log('MOVIE DELETED');
+    res.redirect('/movies');
+  } catch (error) {
+    console.log(error.message);
+    res.redirect('/movies');
+  }
+});
+
+// router.post('/:id/delete', (req, res, next) => {
+//   const movieId = req.params.id;
+//   console.log('userObject: ', movieId);
+//   Movie.findByIdAndRemove(movieId)
+//     .then((movieDetails) => {
+//       res.redirect('/movies');
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.render('movies/new-movie');
+//     });
+// });
+
 module.exports = router;
