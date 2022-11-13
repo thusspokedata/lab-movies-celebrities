@@ -1,0 +1,28 @@
+<h1 class='text-3xl font-semibold text-gray-900 ml-10 mt-28 mb-5'>All movies:</h1>
+
+<div class='columns-2 gap-8'>
+  {{#with this}}
+    <div class='max-w-sm rounded overflow-hidden shadow-lg ml-5'>
+      <div class='px-6 py-4'>
+        <div class='font-bold text-xl mb-2'>Title:
+          <span class='font-normal'>{{title}}</span></div>
+        <div class='font-bold text-xl mb-2'>Genre:
+          <span class='font-normal'>{{genre}}</span></div>
+        <div class='font-bold text-xl mb-2'>Plot:</div>
+        <p class='text-gray-700 text-base ml-4'>
+          {{plot}}
+        </p>
+        <div class='font-bold text-xl mb-2'>Cast:</div>
+        {{#each cast}}
+          <ul>
+            <li class='ml-4'><p><b>Name: </b>{{name}}</p></li>
+            <li class='ml-4'><p><b>Occupation: </b>{{occupation}}</p></li>
+            <li class='ml-4'><p><b>Catchphrase: </b>{{catchphrase}}</p></li>
+            <hr />
+          </ul>
+        {{/each}}
+      </div>
+
+    </div>
+  {{/with}}
+</div>
