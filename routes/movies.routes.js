@@ -5,12 +5,11 @@ const Movie = require('../models/Movie.model');
 router.get('/create', (req, res) => {
   Celebrity.find()
     .then((celebrities) => {
-      // console.log('this is celebrities!!!!!!', celebrities);
       res.render('movies/new-movie', celebrities);
     })
     .catch((err) => {
       console.log(err);
-      res.render('movies/new-movie');
+      res.redirect('/create');
     });
 });
 
@@ -23,12 +22,11 @@ router.post('/create', (req, res, next) => {
     cast,
   })
     .then((movies) => {
-      // console.log(movies);
       res.redirect('/movies');
     })
     .catch((err) => {
       console.log(err);
-      res.render('movies/new-movie');
+      res.redirect('/create');
     });
 });
 
@@ -40,41 +38,27 @@ router.get('/', (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      res.render('movies/new-movie');
+      res.redirect('/');
     });
 });
 
 router.get('/:id', (req, res, next) => {
   const movieId = req.params.id;
-  console.log('userObject: ', movieId);
   Movie.findById(movieId)
     .populate('cast')
     .then((movieDetails) => {
-      console.log('🧟‍♂️🍟movies details: ', movieDetails);
       res.render('movies/movie-details', movieDetails);
     })
     .catch((err) => {
       console.log(err);
-      res.render('movies/new-movie');
+      res.redirect('/');
     });
 });
-
-// router.get('/:id', async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const movie = await Movie.findById(id).populate('cast');
-//     res.render('movies/movie-details', movie);
-//   } catch (error) {
-//     console.log(error.message);
-//     res.redirect('/movies');
-//   }
-// });
 
 router.post('/:id/delete', async (req, res) => {
   const movieId = req.params.id;
   try {
     await Movie.findByIdAndRemove(movieId);
-    console.log('MOVIE DELETED');
     res.redirect('/movies');
   } catch (error) {
     console.log(error.message);
@@ -82,17 +66,39 @@ router.post('/:id/delete', async (req, res) => {
   }
 });
 
-// router.post('/:id/delete', (req, res, next) => {
-//   const movieId = req.params.id;
-//   console.log('userObject: ', movieId);
-//   Movie.findByIdAndRemove(movieId)
-//     .then((movieDetails) => {
-//       res.redirect('/movies');
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.render('movies/new-movie');
-//     });
-// });
+router.get('/:id/edit', (req, res, next) => {
+  const movieId = req.params.id;
+  Celebrity.find().then((celebrities) => {
+    Movie.findById(movieId)
+      .populate('cast')
+      .then((movie) => {
+        res.render('movies/edit-movie', {
+          movie,
+          celebrities,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.redirect('/movies');
+      });
+  });
+});
+
+router.post('/:id/edit', async (req, res) => {
+  const movieId = req.params.id;
+  const { title, genre, plot, cast } = req.body;
+  try {
+    await Movie.findByIdAndUpdate(movieId, {
+      title,
+      genre,
+      plot,
+      cast,
+    });
+    res.redirect('/movies');
+  } catch (error) {
+    console.log(error.message);
+    res.redirect('/movies');
+  }
+});
 
 module.exports = router;
